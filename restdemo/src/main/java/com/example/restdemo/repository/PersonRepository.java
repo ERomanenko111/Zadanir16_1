@@ -1,9 +1,9 @@
-package com.example.restdemo;
+package com.example.restdemo.repository;
 
 import com.example.restdemo.dto.Person;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-@Autowired
-private PersonRepository repository;
+@Repository
+public interface PersonRepository extends CrudRepository<Person, Integer> {
+}
