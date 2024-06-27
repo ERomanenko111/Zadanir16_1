@@ -9,7 +9,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/message")
 public class MessageController {
-    private final List<Message> messageList = new ArrayList<>();
+    private List<Message> messageList = new ArrayList<>();
 
     @GetMapping
     public List<Message> getAllMessage() {
