@@ -7,9 +7,9 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import javax.sql.DataSource;
 
-@SpringBootApplication
+@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
 
-@EnableJpaRepositories(exclude = {DataSourceAutoConfiguration.class})
+@EnableJpaRepositories
 
 public class RestdemoApplication {
 
