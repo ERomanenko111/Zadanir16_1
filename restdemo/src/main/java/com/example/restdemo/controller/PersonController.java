@@ -2,12 +2,15 @@ package com.example.restdemo.controller;
 
 import com.example.restdemo.dto.Person;
 import com.example.restdemo.repository.PersonRepository;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 import java.util.Optional;
 
 @RestController
@@ -15,6 +18,9 @@ public class PersonController {
 
     @Autowired
     private PersonRepository repository;
+
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @GetMapping("/person")
     public Iterable<Person> getPersons() {
