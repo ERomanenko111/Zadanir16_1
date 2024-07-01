@@ -1,11 +1,14 @@
 package com.example.restdemo.controller;
 
 import com.example.restdemo.dto.Message;
+import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
+
+@Service
 @RestController
 @RequestMapping("/message")
 public class MessageController {
