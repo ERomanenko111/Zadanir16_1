@@ -20,13 +20,6 @@ public class Person {
     public Person() {
     }
 
-    public Person(String firstname, String surname, String lastname, LocalDate birthday) {
-        this.firstname = firstname;
-        this.surname = surname;
-        this.lastname = lastname;
-        this.birthday = birthday;
-    }
-
     public Person(int id, String firstname, String surname, String lastname, LocalDate birthday) {
         this.id = id;
         this.firstname = firstname;
