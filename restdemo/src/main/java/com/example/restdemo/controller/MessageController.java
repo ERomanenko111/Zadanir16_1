@@ -35,12 +35,22 @@ public class MessageController {
 
     @PutMapping("/{id}")
     public void updateMessageById(@PathVariable int id, @RequestBody Message updatedMessage) {
-        for (Message m : messageList) {
+        int index = -1;
+        for (int i = 0; i < messageList.size(); i++) {
+            Message m = messageList.get(i);
             if (m.getId() == id) {
                 m.setTitle(updatedMessage.getTitle());
                 m.setText(updatedMessage.getText());
                 m.setTime(updatedMessage.getTime());
+                index = i; // Сохраняем индекс найденной записи
+                break;
             }
+        }
+
+        if (index != -1) {
+            // Обновляем найденную запись с сохранением её id
+            Message oldMessage = messageList.get(index);
+            messageList.set(index, new Message(oldMessage.getId(), updatedMessage.getTitle(), updatedMessage.getText(), updatedMessage.getTime()));
         }
     }
 
