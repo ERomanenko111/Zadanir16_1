@@ -8,13 +8,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/person")
+@RequestMapping("/Person")
 public class PersonController {
 
     @Autowired
     private PersonRepository repository;
 
-    @PostMapping("/")
+    @PostMapping("")
     public ResponseEntity<Person> addPerson(@RequestBody Person person) {
         Person savedPerson = repository.save(person);
         return new ResponseEntity<>(savedPerson, HttpStatus.CREATED);
