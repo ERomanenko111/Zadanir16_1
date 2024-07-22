@@ -9,35 +9,38 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 @RestController
 @RequestMapping("/person")
 public class PersonController {
-
-
     @Autowired
     private PersonRepository repository;
-
     @Autowired
     private PersonService service;
 
     @PostMapping
-    public Person addPerson(@RequestBody Person person) {
+    public ResponseEntity<Person> addPerson(@RequestBody Person person) {
+        if (repository.existsById(person.getId())) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
         repository.save(person);
-        return person;
+        return new ResponseEntity<>(person, HttpStatus.CREATED);
     }
 
     @PostMapping("/{id}/message")
-    public Person addMessage(@PathVariable int id, @RequestBody Message message) {
-        return service.addMeesageToPerson(id, message);
+    public ResponseEntity<Person> addMessage(@PathVariable int id, @RequestBody Message message) {
+        if (!repository.existsById(id)) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(service.addMeesageToPerson(id, message), HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Person> updatePerson(@PathVariable int id, @RequestBody Person person) {
-        HttpStatus status = repository.existsById(id) ? HttpStatus.OK : HttpStatus.CREATED;
+        HttpStatus status = repository.existsById(id) ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
         return new ResponseEntity<>(repository.save(person), status);
     }
 
@@ -47,8 +50,9 @@ public class PersonController {
     }
 
     @GetMapping("/{id}")
-    public Optional<Person> findPersonById(@PathVariable int id) {
-        return repository.findById(id);
+    public ResponseEntity<Person> findPersonById(@PathVariable int id) {
+        Optional<Person> person = repository.findById(id);
+        return person.map(value -> new ResponseEntity<>(value, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     @DeleteMapping("/{id}")
@@ -59,10 +63,22 @@ public class PersonController {
     @GetMapping("/{id}/message")
     public ResponseEntity<List<Message>> getMessagesByPersonId(@PathVariable int id) {
         Optional<Person> person = repository.findById(id);
-        if (person.isPresent()) {
-            return new ResponseEntity<>(person.get().getMessages(), HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        return person.map(value -> new ResponseEntity<>(value.getMessages(), HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+    @DeleteMapping("/{id}/message/{messageId}")
+    public void deleteMessageFromPerson(@PathVariable int id, @PathVariable int messageId) {
+        Optional<Person> person = repository.findById(id);
+        person.ifPresent(value -> {
+            List<Message> messages = value.getMessages();
+            messages.removeIf(message -> message.getId() == messageId);
+            repository.save(value);
+        });
+    }
+
+    @GetMapping("/{id}/messageList")
+    public List<Message> getMessageListByPersonId(@PathVariable int id) {
+        Optional<Person> person = repository.findById(id);
+        return person.map(Person::getMessages).orElseGet(Collections::emptyList);
     }
 }
