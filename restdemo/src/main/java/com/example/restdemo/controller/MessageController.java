@@ -20,6 +20,16 @@ public class MessageController {
     public List<Message> getAllMessage() {
         return (List<Message>) messageRepository.findAll();
     }
+    @GetMapping("/{id}")
+    public ResponseEntity<Message> getMessageById(@PathVariable int id) {
+        Optional<Message> message = messageRepository.findById(id);
+
+        if (message.isPresent()) {
+            return new ResponseEntity<>(message.get(), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
 
     @PostMapping("/add")
     public Message addMessage(@RequestBody Message message) {
