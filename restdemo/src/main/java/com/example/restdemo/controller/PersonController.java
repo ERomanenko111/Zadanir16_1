@@ -90,4 +90,17 @@ public class PersonController {
         Optional<Person> person = repository.findById(id);
         return person.map(Person::getMessages).orElseGet(Collections::emptyList);
     }
+
+    @GetMapping("/{p_id}/message/{m_id}")
+    public ResponseEntity<Message> getMessageById(@PathVariable int p_id, @PathVariable int m_id) {
+        Optional<Person> person = repository.findById(p_id);
+        if (person.isPresent()) {
+            Optional<Message> message = person.get().getMessages().stream()
+                    .filter(m -> m.getId() == m_id)
+                    .findFirst();
+            return message.map(value -> new ResponseEntity<>(value, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
 }

@@ -1,4 +1,0 @@
-2024-07-22 11:50:00 jdbc[13]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Синтаксическая ошибка в выражении SQL "SELEXT[*]*FROM MESSAGES"; ожидалось "SET, SAVEPOINT, SCRIPT, SHUTDOWN, SHOW"
-Syntax error in SQL statement "SELEXT[*]*FROM MESSAGES"; expected "SET, SAVEPOINT, SCRIPT, SHUTDOWN, SHOW"; SQL statement:
-SELEXT*FROM MESSAGES [42001-200]
