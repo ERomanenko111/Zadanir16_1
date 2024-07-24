@@ -35,7 +35,7 @@ public class PersonController {
         if (!repository.existsById(id)) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>(service.addMessageToPerson(id, message), HttpStatus.OK);
+        return new ResponseEntity<>(service.addMeesageToPerson(id, message), HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
